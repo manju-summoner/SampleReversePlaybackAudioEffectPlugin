@@ -28,9 +28,12 @@ namespace SampleReversePlaybackAudioEffectPlugin
 
             //一度作成したキャッシュを使いまわしたい場合は、このファイルの1行目（//#define EnableGlobalCache）のコメントアウトを外してください。
             //実装が十分でないため、ReversePlaybackAudioEffectProcessorDataCache.csのコメントも参照してください。
-            cache = new float[Input.Duration];
-            Input.Seek(0);//streamは事前にseekしておく必要がある
-            Input.Read(cache, 0, cache.Length);
+            if (cache is null)
+            {
+                cache = new float[Input.Duration];
+                Input.Seek(0);//streamは事前にseekしておく必要がある
+                Input.Read(cache, 0, cache.Length);
+            }
 #endif
             var readCount = Math.Min(count, cache.Length);
             for (int i = 0; i < readCount / 2; i++)
